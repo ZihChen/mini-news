@@ -1,0 +1,37 @@
+version: "3"
+
+services:
+  golang:
+    build:
+      context: .
+    container_name: ${PROJECT_NAME}
+    restart: always
+    environment:
+      - ENV = local
+      - PROJECT_NAME = ${PROJECT_NAME}
+    depends_on:
+      - mysql
+    working_dir: /go/src/mini-news
+    networks:
+      - web_service
+    volumes:
+      - .:/go/src/mini-news
+    labels:
+      - "traefik.http.routers.golang-${PROJECT_NAME}.rule=Host(`${PROJECT_NAME}.local.com`)"
+      - "traefik.http.services.golang-${PROJECT_NAME}.loadbalancer.server.port=8080"
+    command: "fresh runner.conf"
+  mysql:
+    image: mysql:5.7
+    container_name: ${PROJECT_NAME}-db
+    restart: always
+    volumes:
+      - /home/winston/DB/mini-news:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mininews
+    networks:
+      - web_service
+
+networks:
+  web_service:
+    external: true
