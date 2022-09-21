@@ -1,20 +1,20 @@
-package config
+package settings
 
 import (
+	"embed"
 	"gopkg.in/yaml.v2"
-	"io/ioutil"
 	"mini-news/app/global/structs"
 )
 
-var Config *structs.DBConfig
+var Config *structs.EnvConfig
 
-func Load() (err error) {
+func Load(f embed.FS) (err error) {
 	envPathList := []string{
 		"env/" + "local" + "/db.yaml",
 	}
 
-	for _, path := range envPathList {
-		configFile, err := ioutil.ReadFile(path)
+	for k := range envPathList {
+		configFile, err := f.ReadFile(envPathList[k])
 		if err != nil {
 			panic(err.Error())
 		}
