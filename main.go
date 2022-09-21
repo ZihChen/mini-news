@@ -16,6 +16,8 @@ func init() {
 	// DB connect
 	db := database.NewDBInstance()
 	db.Ping()
+	// Table migrate
+	db.CheckTableIsExist()
 }
 
 func main() {

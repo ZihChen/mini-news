@@ -6,6 +6,7 @@ import (
 	"gorm.io/gorm"
 	"log"
 	"mini-news/app/global/settings"
+	"mini-news/app/model"
 	"time"
 )
 
@@ -77,7 +78,20 @@ func (d *dbCon) Ping() {
 }
 
 func (d *dbCon) CheckTableIsExist() {
+	db, err := d.DBConnect()
+	if err != nil {
+		log.Fatalf("CHECK DB CONNECT ERROR: %v", err.Error())
+	}
 
+	err = db.AutoMigrate(&model.User{})
+	if err != nil {
+		log.Fatalf("USER TABLE MIGRATE ERROR: %v", err.Error())
+	}
+
+	err = db.AutoMigrate(&model.CryptoArticle{})
+	if err != nil {
+		log.Fatalf("CREYTOARTICLE TABLE MIGRATE ERROR: %v", err.Error())
+	}
 }
 
 func composeConfString() string {
