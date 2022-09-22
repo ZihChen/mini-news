@@ -16,10 +16,10 @@ func (w *Wrapper) Json(response *Response) {
 	w.ctx.JSON(200, response)
 }
 
-func (w *Wrapper) Success(data interface{}, message string) {
+func (w *Wrapper) Success(statusCode int, data interface{}) {
 	response := New()
+	response.StatusCode = statusCode
 	response.Data = data
-	response.Message = message
 	w.Json(response)
 }
 
