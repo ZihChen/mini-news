@@ -1,6 +1,9 @@
 package response
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"mini-news/app/global/errorcode"
+)
 
 type Wrapper struct {
 	ctx *gin.Context
@@ -23,7 +26,7 @@ func (w *Wrapper) Success(statusCode int, data interface{}) {
 	w.Json(response)
 }
 
-func (w *Wrapper) Error(statusCode int, message string) {
+func (w *Wrapper) Error(statusCode int, message errorcode.Error) {
 	response := New()
 	response.StatusCode = statusCode
 	response.Message = message

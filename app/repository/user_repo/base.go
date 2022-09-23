@@ -1,12 +1,13 @@
 package user_repo
 
 import (
+	"mini-news/app/global/errorcode"
 	"mini-news/internal/database"
 	"sync"
 )
 
 type Interface interface {
-	CreateUserByMap(fields map[string]interface{}) (err error)
+	CreateUserByMap(fields map[string]interface{}) (goErr errorcode.Error)
 }
 
 type repo struct {

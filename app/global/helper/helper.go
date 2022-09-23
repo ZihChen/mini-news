@@ -3,6 +3,7 @@ package helper
 import (
 	"fmt"
 	jsoniter "github.com/json-iterator/go"
+	"mini-news/app/global/errorcode"
 )
 
 func StructToMap(myStruct interface{}) (myMap map[string]interface{}, err error) {
@@ -16,6 +17,16 @@ func StructToMap(myStruct interface{}) (myMap map[string]interface{}, err error)
 	if err = jsoniter.Unmarshal(byteData, &myMap); err != nil {
 		return
 	}
+
+	return
+}
+
+func ErrorHandle(errComponent errorcode.ErrComponent, errType errorcode.ResponseErrType, errMsg string) (goError errorcode.Error) {
+	goError = errorcode.NewGoError()
+
+	goError.SetErrComponent(errComponent)
+	goError.SetResponseErrType(errType)
+	goError.SetErrMsg(errMsg)
 
 	return
 }

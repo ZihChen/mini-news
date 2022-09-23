@@ -1,8 +1,12 @@
 package user_repo
 
-import "mini-news/app/model"
+import (
+	"mini-news/app/global/errorcode"
+	"mini-news/app/global/helper"
+	"mini-news/app/model"
+)
 
-func (r *repo) CreateUserByMap(fields map[string]interface{}) (err error) {
+func (r *repo) CreateUserByMap(fields map[string]interface{}) (goErr errorcode.Error) {
 	db, err := r.DB.DBConnect()
 	if err != nil {
 		return
@@ -11,6 +15,7 @@ func (r *repo) CreateUserByMap(fields map[string]interface{}) (err error) {
 	tx := db.Begin()
 
 	if err = tx.Model(&model.User{}).Create(fields).Error; err != nil {
+		goErr = helper.ErrorHandle(errorcode.ErrorRepository, errorcode.UserCreateError, err.Error())
 		tx.Rollback()
 		return
 	}

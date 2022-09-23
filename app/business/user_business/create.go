@@ -1,15 +1,22 @@
 package user_business
 
 import (
+	"mini-news/app/global/errorcode"
 	"mini-news/app/global/helper"
 	"mini-news/app/global/structs/request"
 )
 
-func (b *business) CreateUser(option request.CreateUserOption) (err error) {
+func (b *business) CreateUser(option request.CreateUserOption) (goErr errorcode.Error) {
 
-	mapFields, _ := helper.StructToMap(option)
+	mapFields, err := helper.StructToMap(option)
+	if err != nil {
+		goErr = helper.ErrorHandle(errorcode.ErrorBusiness, errorcode.StructToMapError, err.Error())
+		return
+	}
 
-	b.userRepo.CreateUserByMap(mapFields)
+	if goErr = b.userRepo.CreateUserByMap(mapFields); goErr != nil {
+		return
+	}
 
 	return
 }

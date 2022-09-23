@@ -2,6 +2,8 @@ package user_handler
 
 import (
 	"github.com/gin-gonic/gin"
+	"mini-news/app/global/errorcode"
+	"mini-news/app/global/helper"
 	"mini-news/app/global/response"
 	"mini-news/app/global/structs/request"
 	"mini-news/app/global/validator"
@@ -11,17 +13,19 @@ import (
 func (h *Handler) CreateUser(c *gin.Context) {
 	option := request.CreateUserOption{}
 	if err := c.ShouldBindJSON(&option); err != nil {
-		response.WrapContext(c).Error(1001, err.Error())
+		goErr := helper.ErrorHandle(errorcode.ErrorHandler, errorcode.JsonBindError, err.Error())
+		response.WrapContext(c).Error(http.StatusOK, goErr)
 		return
 	}
 
 	if err := validator.ValidateParams(option); err != nil {
-		response.WrapContext(c).Error(1002, err.Error())
+		goErr := helper.ErrorHandle(errorcode.ErrorHandler, errorcode.InvalidParamError, err.Error())
+		response.WrapContext(c).Error(http.StatusOK, goErr)
 		return
 	}
 
-	if err := h.userBusiness.CreateUser(option); err != nil {
-		response.WrapContext(c).Error(1003, err.Error())
+	if goErr := h.userBusiness.CreateUser(option); goErr != nil {
+		response.WrapContext(c).Error(http.StatusOK, goErr)
 	}
 
 	response.WrapContext(c).Success(http.StatusOK, "")

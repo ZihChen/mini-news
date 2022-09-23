@@ -1,13 +1,16 @@
 package response
 
-import "github.com/google/uuid"
+import (
+	"github.com/google/uuid"
+	"mini-news/app/global/errorcode"
+)
 
 type Response struct {
-	StatusCode int         `json:"status_code"`
-	Message    string      `json:"message"`
-	Data       interface{} `json:"data"`
-	Meta       Meta        `json:"meta"`
-	Errors     []ErrorItem `json:"errors"`
+	StatusCode int             `json:"status_code"`
+	Message    errorcode.Error `json:"message"`
+	Data       interface{}     `json:"data"`
+	Meta       Meta            `json:"meta"`
+	Errors     []ErrorItem     `json:"errors"`
 }
 
 type Meta struct {
@@ -22,7 +25,7 @@ type ErrorItem struct {
 func New() *Response {
 	return &Response{
 		StatusCode: 200,
-		Message:    "",
+		Message:    &errorcode.GoError{},
 		Data:       nil,
 		Meta: Meta{
 			RequestId: func() string {

@@ -1,13 +1,14 @@
 package user_business
 
 import (
+	"mini-news/app/global/errorcode"
 	"mini-news/app/global/structs/request"
 	"mini-news/app/repository/user_repo"
 	"sync"
 )
 
 type Interface interface {
-	CreateUser(option request.CreateUserOption) (err error)
+	CreateUser(option request.CreateUserOption) (goErr errorcode.Error)
 }
 
 type business struct {
