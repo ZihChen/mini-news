@@ -5,6 +5,8 @@ import (
 	"mini-news/app/global/settings"
 	"mini-news/internal/database"
 	"mini-news/internal/entry"
+
+	_ "mini-news/docs"
 )
 
 //go:embed env/*
@@ -20,6 +22,8 @@ func init() {
 	db.CheckTableIsExist()
 }
 
+// @title MiniNews
+// @version 1.0
 func main() {
 	entry.Exec()
 }

@@ -10,6 +10,11 @@ import (
 	"net/http"
 )
 
+// CreateUser 創建User
+// @Summary 創建User
+// @Tags User
+// @Produce json
+// @Router /api/user/create [POST]
 func (h *Handler) CreateUser(c *gin.Context) {
 	option := request.CreateUserOption{}
 	if err := c.ShouldBindJSON(&option); err != nil {
