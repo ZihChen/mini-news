@@ -2,12 +2,13 @@ package jwtservice
 
 import (
 	"github.com/golang-jwt/jwt"
+	"mini-news/app/global/errorcode"
 	"mini-news/app/model"
 	"sync"
 )
 
 type Interface interface {
-	GenerateToken(user model.User) (token string, err error)
+	GenerateToken(user model.User) (token string, goError errorcode.Error)
 	ValidateToken(tokenString string) (int, string, error)
 }
 

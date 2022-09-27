@@ -17,6 +17,7 @@ func LoadingRouter(r *gin.Engine) {
 		user := api.Group("/user")
 		{
 			user.POST("/create", userHandler.CreateUser)
+			user.POST("/login", userHandler.Login)
 		}
 	}
 }

@@ -5,6 +5,8 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
+	"mini-news/app/global/errorcode"
+	"mini-news/app/global/helper"
 	"mini-news/app/global/settings"
 	"mini-news/app/model"
 	"time"
@@ -13,7 +15,7 @@ import (
 var connectPool *gorm.DB
 
 type Interface interface {
-	DBConnect() (*gorm.DB, error)
+	DBConnect() (*gorm.DB, errorcode.Error)
 	CheckTableIsExist()
 	Ping()
 }
@@ -29,7 +31,7 @@ func NewDBInstance() Interface {
 	return &dbCon{}
 }
 
-func (d *dbCon) DBConnect() (*gorm.DB, error) {
+func (d *dbCon) DBConnect() (*gorm.DB, errorcode.Error) {
 	var err error
 
 	if connectPool != nil {
@@ -42,12 +44,14 @@ func (d *dbCon) DBConnect() (*gorm.DB, error) {
 		DisableForeignKeyConstraintWhenMigrating: true,
 	})
 	if err != nil {
-		log.Fatalf("DB CONNECT ERROR: %v", err.Error())
+		goErr := helper.ErrorHandle(errorcode.ErrorDatabase, errorcode.DBConnectError, err.Error())
+		return nil, goErr
 	}
 
 	sqlPool, err := connectPool.DB()
 	if err != nil {
-		log.Fatalf("DB CONNECT POOL ERROR: %v", err.Error())
+		goErr := helper.ErrorHandle(errorcode.ErrorDatabase, errorcode.DBConnectPoolError, err.Error())
+		return nil, goErr
 	}
 
 	// 限制最大開啟的連線數
@@ -57,40 +61,40 @@ func (d *dbCon) DBConnect() (*gorm.DB, error) {
 	// 空閒連線 timeout 時間
 	sqlPool.SetConnMaxLifetime(15 * time.Second)
 
-	return connectPool.Debug(), err
+	return connectPool.Debug(), nil
 }
 
 func (d *dbCon) Ping() {
-	connectPool, err := d.DBConnect()
-	if err != nil {
-		log.Fatalf("CHECK DB CONNECT ERROR: %v", err.Error())
+	connectPool, goErr := d.DBConnect()
+	if goErr != nil {
+		log.Fatalf(errorcode.CheckDBConnectError, goErr.GetErrorMsg())
 	}
 
 	db, err := connectPool.DB()
 	if err != nil {
-		log.Fatalf("CHECK CONNECT POOL ERROR: %v", err.Error())
+		log.Fatalf(errorcode.CheckConnectPoolError, err.Error())
 	}
 
 	err = db.Ping()
 	if err != nil {
-		log.Fatalf("PING DB ERROR: %v", err.Error())
+		log.Fatalf(errorcode.PingDBError, err.Error())
 	}
 }
 
 func (d *dbCon) CheckTableIsExist() {
-	db, err := d.DBConnect()
-	if err != nil {
-		log.Fatalf("CHECK DB CONNECT ERROR: %v", err.Error())
+	db, goErr := d.DBConnect()
+	if goErr != nil {
+		log.Fatalf(errorcode.CheckDBConnectError, goErr.GetErrorMsg())
 	}
 
-	err = db.AutoMigrate(&model.User{})
+	err := db.AutoMigrate(&model.User{})
 	if err != nil {
-		log.Fatalf("USER TABLE MIGRATE ERROR: %v", err.Error())
+		log.Fatalf(errorcode.UserTableMigrateError, err.Error())
 	}
 
 	err = db.AutoMigrate(&model.CryptoArticle{})
 	if err != nil {
-		log.Fatalf("CREYTOARTICLE TABLE MIGRATE ERROR: %v", err.Error())
+		log.Fatalf(errorcode.CryptoArticleTableMigrateError, err.Error())
 	}
 }
 

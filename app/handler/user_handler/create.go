@@ -10,6 +10,34 @@ import (
 	"net/http"
 )
 
+// Login UserLogin
+// @Summary 使用者登入
+// @Tags User
+// @Produce json
+// @Router /api/user/login [POST]
+func (h *Handler) Login(c *gin.Context) {
+	option := request.UserLogin{}
+	if err := c.ShouldBindJSON(&option); err != nil {
+		goErr := helper.ErrorHandle(errorcode.ErrorHandler, errorcode.JsonBindError, err.Error())
+		response.WrapContext(c).Error(http.StatusOK, goErr)
+		return
+	}
+
+	if err := validator.ValidateParams(option); err != nil {
+		goErr := helper.ErrorHandle(errorcode.ErrorHandler, errorcode.InvalidParamError, err.Error())
+		response.WrapContext(c).Error(http.StatusOK, goErr)
+		return
+	}
+
+	token, goErr := h.userBusiness.UserLogin(option)
+	if goErr != nil {
+		response.WrapContext(c).Error(http.StatusOK, goErr)
+		return
+	}
+
+	response.WrapContext(c).Success(http.StatusOK, token)
+}
+
 // CreateUser 創建User
 // @Summary 創建User
 // @Tags User

@@ -1,28 +1,7 @@
 package errorcode
 
 type ErrComponent string
-
-const (
-	ErrorHandler    ErrComponent = "handler"
-	ErrorService    ErrComponent = "service"
-	ErrorBusiness   ErrComponent = "business"
-	ErrorRepository ErrComponent = "repository"
-)
-
 type ResponseErrType string
-
-const (
-	/* http error*/
-	BadRequest       ResponseErrType = "Bad Request"
-	NotFoundResource ResponseErrType = "Not Found"
-	AlreadyExists    ResponseErrType = "Already Exists"
-
-	JsonBindError     ResponseErrType = "JSON Bind Error"
-	StructToMapError  ResponseErrType = "Struct To Map Error"
-	InvalidParamError ResponseErrType = "Invalid Param Error"
-
-	UserCreateError ResponseErrType = "User Create Error"
-)
 
 type GoError struct {
 	error
