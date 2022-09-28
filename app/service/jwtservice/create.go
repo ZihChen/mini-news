@@ -4,11 +4,12 @@ import (
 	"github.com/golang-jwt/jwt"
 	"mini-news/app/global/errorcode"
 	"mini-news/app/global/helper"
+	"mini-news/app/global/settings"
 	"mini-news/app/model"
 	"time"
 )
 
-func (s *service) GenerateToken(user model.User) (tokenString string, goError errorcode.Error) {
+func (s *Service) GenerateToken(user model.User) (tokenString string, goError errorcode.Error) {
 	expireAt := time.Now().Add(24 * time.Hour).Unix()
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS512, authClaims{
@@ -19,7 +20,7 @@ func (s *service) GenerateToken(user model.User) (tokenString string, goError er
 		UserID: user.ID,
 	})
 
-	tokenString, err := token.SignedString(jwtKey)
+	tokenString, err := token.SignedString([]byte(settings.Config.JwtConfig.Key))
 	if err != nil {
 		goError = helper.ErrorHandle(errorcode.ErrorService, errorcode.GenerateTokenError, err.Error())
 		return "", goError

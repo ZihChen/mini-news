@@ -1,29 +1,34 @@
 package jwtservice
 
 import (
-	"errors"
 	"fmt"
 	"github.com/golang-jwt/jwt"
+	"mini-news/app/global/errorcode"
+	"mini-news/app/global/helper"
+	"mini-news/app/global/settings"
 )
 
-func (s *service) ValidateToken(tokenString string) (int, string, error) {
+func (s *Service) ValidateToken(tokenString string) (id int, username string, goError errorcode.Error) {
 	var claims authClaims
 	token, err := jwt.ParseWithClaims(tokenString, &claims, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
-		return jwtKey, nil
+		return []byte(settings.Config.JwtConfig.Key), nil
 	})
 
 	if err != nil {
-		return 0, "", err
+		goError = helper.ErrorHandle(errorcode.ErrorService, errorcode.ParseWithClaimsError, err.Error())
+		return 0, "", goError
 	}
 
 	if !token.Valid {
-		return 0, "", errors.New("invalid token")
+		goError = helper.ErrorHandle(errorcode.ErrorService, errorcode.InvalidTokenError, token.Raw)
+		return 0, "", goError
 	}
 
-	id := claims.UserID
-	username := claims.Subject
+	id = claims.UserID
+	username = claims.Subject
+
 	return id, username, nil
 }

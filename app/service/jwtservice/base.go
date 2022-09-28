@@ -9,15 +9,13 @@ import (
 
 type Interface interface {
 	GenerateToken(user model.User) (token string, goError errorcode.Error)
-	ValidateToken(tokenString string) (int, string, error)
+	ValidateToken(tokenString string) (id int, username string, goError errorcode.Error)
 }
 
-type service struct{}
+type Service struct{}
 
-var singleton *service
+var singleton *Service
 var once sync.Once
-
-var jwtKey = []byte("Qt6/brgIDg00xD1cpBdfGJzMPS4x+nEZZ2lBSKqlqo7UOl8bWuMhEYnoVRND7HwQ\nm3jUqJXBooDKayuFZOhMiGj6Cj+K1HGE5NkPXo72koaIftkV+nYWmdlS0gRhJSg2\n7tQKRrI11OVuTWZW9AXfJs0PvHie8V183TCjNYIdOesyRSyxpKoItGaa5lKPXnS/\n840KoEnCFY3eqGSkavRvplljXH8WuWKV9CtPFw==")
 
 type authClaims struct {
 	jwt.StandardClaims
@@ -26,7 +24,7 @@ type authClaims struct {
 
 func NewService() Interface {
 	once.Do(func() {
-		singleton = &service{}
+		singleton = &Service{}
 	})
 	return singleton
 }

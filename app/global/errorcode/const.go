@@ -6,6 +6,7 @@ const (
 	ErrorBusiness   ErrComponent = "business"
 	ErrorRepository ErrComponent = "repository"
 	ErrorDatabase   ErrComponent = "database"
+	ErrorMiddleware ErrComponent = "middleware"
 )
 
 /* API Response error*/
@@ -24,6 +25,9 @@ const (
 	UserCreateError            ResponseErrType = "User Create Error"
 	UserPasswordIncorrectError ResponseErrType = "User Password Incorrect Error"
 	GenerateTokenError         ResponseErrType = "Generate Token Error"
+	GetHeaderTokenError        ResponseErrType = "Get Header Token Error"
+	ParseWithClaimsError       ResponseErrType = "Parse with Claims Error"
+	InvalidTokenError          ResponseErrType = "Invalid Token Error"
 
 	/* Database error*/
 	DBConnectError     ResponseErrType = "DB Connect Error"

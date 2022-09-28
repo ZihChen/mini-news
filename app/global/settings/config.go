@@ -11,6 +11,7 @@ var Config *structs.EnvConfig
 func Load(f embed.FS) (err error) {
 	envPathList := []string{
 		"env/" + "local" + "/db.yaml",
+		"env/" + "local" + "/other.yaml",
 	}
 
 	for k := range envPathList {
