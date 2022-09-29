@@ -6,13 +6,14 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"mini-news/app/handler/user_handler"
 	"mini-news/app/middleware/jwt"
+	"mini-news/app/middleware/logwriter"
 )
 
 func LoadingRouter(r *gin.Engine) {
 
 	userHandler := user_handler.NewsHandler()
 
-	api := r.Group("/api")
+	api := r.Group("/api", logwriter.RequestLog)
 	{
 		api.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 		user := api.Group("/user")
