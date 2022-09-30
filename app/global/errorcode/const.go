@@ -20,6 +20,7 @@ const (
 	JsonBindError     ResponseErrType = "JSON Bind Error"
 	StructToMapError  ResponseErrType = "Struct To Map Error"
 	InvalidParamError ResponseErrType = "Invalid Param Error"
+	JsonMarshalError  ResponseErrType = "Json Marshal Error"
 
 	GetUserError               ResponseErrType = "Get User Error"
 	UserCreateError            ResponseErrType = "User Create Error"
@@ -28,6 +29,10 @@ const (
 	GetHeaderTokenError        ResponseErrType = "Get Header Token Error"
 	ParseWithClaimsError       ResponseErrType = "Parse with Claims Error"
 	InvalidTokenError          ResponseErrType = "Invalid Token Error"
+	GetAbmediaNewsError        ResponseErrType = "Get Abmedia News Error"
+	VisitAbmediaNewsError      ResponseErrType = "Visit Abmedia News Error"
+	GetArticleByTypeNamesError ResponseErrType = "Get Article by Type Names Error"
+	InsertArticleByMapsError   ResponseErrType = "Insert Article by Maps Error"
 
 	/* Database error*/
 	DBConnectError     ResponseErrType = "DB Connect Error"

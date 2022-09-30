@@ -1,8 +1,10 @@
-package cryptonews
+package cryptonews_service
 
 import (
 	"fmt"
 	"github.com/gocolly/colly"
+	"mini-news/app/global/errorcode"
+	"mini-news/app/global/helper"
 	"strings"
 )
 
@@ -15,7 +17,7 @@ func init() {
 	)
 }
 
-func (s *service) GetAbmediaArticles() (articles []CryptoArticle) {
+func (s *service) GetAbmediaArticles() (articles []CryptoArticle, goErr errorcode.Error) {
 	c.OnResponse(func(r *colly.Response) {
 		fmt.Println(r.Request.URL)
 	})
@@ -26,33 +28,42 @@ func (s *service) GetAbmediaArticles() (articles []CryptoArticle) {
 
 			src := el.ChildAttr("div[class='description'] > h3[class='title'] > a", "href")
 			articles = append(articles, CryptoArticle{
-				ArticleName: parsArticleName(src),
-				Type:        ABMEDIA,
-				Source:      src,
-				Title:       el.ChildText("div[class='description'] > h3"),
+				Name:   parsArticleName(src),
+				Site:   ABMEDIA,
+				Source: src,
+				Title:  el.ChildText("div[class='description'] > h3"),
 				Image: func() string {
 					img := el.ChildAttr("figure > a > img", "data-lazy-srcset")
 					parse := strings.Split(img, "?")
 					return parse[0]
 				}(),
-				Time: el.ChildAttr("div[class='description'] > div > time", "datetime"),
+				Date: func() string {
+					datetime := el.ChildAttr("div[class='description'] > div > time", "datetime")
+					formatStr := strings.Split(datetime, "T")
+					return formatStr[0]
+				}(),
 			})
 
 		})
 	})
 
 	c.OnError(func(response *colly.Response, err error) {
-		fmt.Println(err)
+		goErr = helper.ErrorHandle(errorcode.ErrorService, errorcode.GetAbmediaNewsError, err.Error())
 	})
 
-	if err := c.Visit("https://" + ABMEDIA_DOMAIN + "/blog"); err != nil {
+	if goErr != nil {
+		return
+	}
 
+	if err := c.Visit("https://" + ABMEDIA_DOMAIN + "/blog"); err != nil {
+		goErr = helper.ErrorHandle(errorcode.ErrorService, errorcode.VisitAbmediaNewsError, err.Error())
+		return
 	}
 
 	return
 }
 
-func (s *service) GetBlockTempoArticles() (articles []CryptoArticle) {
+func (s *service) GetBlockTempoArticles() (articles []CryptoArticle, goErr errorcode.Error) {
 	c.OnResponse(func(r *colly.Response) {
 		fmt.Println(r.Request.URL)
 	})
@@ -63,12 +74,12 @@ func (s *service) GetBlockTempoArticles() (articles []CryptoArticle) {
 
 			src := el.ChildAttr("div[class='jeg_postblock_content'] > h3[class='jeg_post_title'] > a", "href")
 			articles = append(articles, CryptoArticle{
-				ArticleName: parsArticleName(src),
-				Type:        BLOCKTEMPO,
-				Source:      src,
-				Title:       el.ChildText("div[class='jeg_postblock_content'] > h3[class='jeg_post_title'] > a"),
-				Image:       el.ChildAttr("div[class='jeg_thumb'] > a > div[class='thumbnail-container animate-lazy  size-715 '] > img", "data-src"),
-				Time:        el.ChildText("div[class='jeg_postblock_content'] > div[class='jeg_post_meta'] > div[class='jeg_meta_date'] > a"),
+				Name:   parsArticleName(src),
+				Site:   BLOCKTEMPO,
+				Source: src,
+				Title:  el.ChildText("div[class='jeg_postblock_content'] > h3[class='jeg_post_title'] > a"),
+				Image:  el.ChildAttr("div[class='jeg_thumb'] > a > div[class='thumbnail-container animate-lazy  size-715 '] > img", "data-src"),
+				Date:   el.ChildText("div[class='jeg_postblock_content'] > div[class='jeg_post_meta'] > div[class='jeg_meta_date'] > a"),
 			})
 		})
 	})
@@ -84,7 +95,7 @@ func (s *service) GetBlockTempoArticles() (articles []CryptoArticle) {
 	return
 }
 
-func (s *service) GetBlockCastArticles() (articles []CryptoArticle) {
+func (s *service) GetBlockCastArticles() (articles []CryptoArticle, goErr errorcode.Error) {
 	c.OnResponse(func(r *colly.Response) {
 		fmt.Println(r.Request.URL)
 	})
@@ -95,12 +106,12 @@ func (s *service) GetBlockCastArticles() (articles []CryptoArticle) {
 
 			src := el.ChildAttr("div[class='jeg_postblock_content'] > h3[class='jeg_post_title'] > a", "href")
 			articles = append(articles, CryptoArticle{
-				ArticleName: parsArticleName(src),
-				Type:        BLOCKCAST,
-				Source:      src,
-				Title:       el.ChildText("div[class='jeg_postblock_content'] > h3[class='jeg_post_title'] > a"),
-				Image:       el.ChildAttr("div[class='jeg_thumb'] > a > div[class='thumbnail-container animate-lazy  size-500 '] > img", "src"),
-				Time:        el.ChildText("div[class='jeg_postblock_content'] > div[class='jeg_post_meta'] > div[class='jeg_meta_date'] > a"),
+				Name:   parsArticleName(src),
+				Site:   BLOCKCAST,
+				Source: src,
+				Title:  el.ChildText("div[class='jeg_postblock_content'] > h3[class='jeg_post_title'] > a"),
+				Image:  el.ChildAttr("div[class='jeg_thumb'] > a > div[class='thumbnail-container animate-lazy  size-500 '] > img", "src"),
+				Date:   el.ChildText("div[class='jeg_postblock_content'] > div[class='jeg_post_meta'] > div[class='jeg_meta_date'] > a"),
 			})
 		})
 	})

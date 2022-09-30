@@ -1,4 +1,4 @@
-package cryptonews
+package cryptonews_service
 
 const (
 	ABMEDIA    = "abmedia"

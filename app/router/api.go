@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"mini-news/app/business/cryptoarticle_business"
 	"mini-news/app/handler/user_handler"
 	"mini-news/app/middleware/jwt"
 	"mini-news/app/middleware/logwriter"
@@ -24,7 +25,10 @@ func LoadingRouter(r *gin.Engine) {
 
 		api.Use(jwt.VerifyToken)
 		{
-
+			api.GET("/test", func(c *gin.Context) {
+				b := cryptoarticle_business.NewBusiness()
+				b.SyncAbmediaArticles()
+			})
 		}
 	}
 }
