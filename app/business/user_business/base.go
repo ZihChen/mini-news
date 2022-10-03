@@ -10,7 +10,7 @@ import (
 
 type Interface interface {
 	UserLogin(option request.UserLogin) (token string, goErr errorcode.Error)
-	CreateUser(option request.CreateUserOption) (goErr errorcode.Error)
+	CreateUser(option request.RegisterUserOption) (goErr errorcode.Error)
 }
 
 type business struct {

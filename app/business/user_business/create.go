@@ -6,7 +6,7 @@ import (
 	"mini-news/app/global/structs/request"
 )
 
-func (b *business) CreateUser(option request.CreateUserOption) (goErr errorcode.Error) {
+func (b *business) CreateUser(option request.RegisterUserOption) (goErr errorcode.Error) {
 
 	mapFields, err := helper.StructToMap(option)
 	if err != nil {

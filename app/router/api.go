@@ -19,7 +19,7 @@ func LoadingRouter(r *gin.Engine) {
 		api.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 		user := api.Group("/user")
 		{
-			user.POST("/create", userHandler.CreateUser)
+			user.POST("/register", userHandler.RegisterUser)
 			user.POST("/login", userHandler.Login)
 		}
 

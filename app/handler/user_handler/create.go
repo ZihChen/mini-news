@@ -38,13 +38,13 @@ func (h *Handler) Login(c *gin.Context) {
 	response.WrapContext(c).Success(http.StatusOK, token)
 }
 
-// CreateUser 創建User
-// @Summary 創建User
+// RegisterUser 註冊User
+// @Summary 註冊User
 // @Tags User
 // @Produce json
-// @Router /api/user/create [POST]
-func (h *Handler) CreateUser(c *gin.Context) {
-	option := request.CreateUserOption{}
+// @Router /api/user/register [POST]
+func (h *Handler) RegisterUser(c *gin.Context) {
+	option := request.RegisterUserOption{}
 	if err := c.ShouldBindJSON(&option); err != nil {
 		goErr := helper.ErrorHandle(errorcode.ErrorHandler, errorcode.JsonBindError, err.Error())
 		response.WrapContext(c).Error(http.StatusOK, goErr)
