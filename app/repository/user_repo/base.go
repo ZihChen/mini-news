@@ -9,6 +9,7 @@ import (
 
 type Interface interface {
 	CreateUserByMap(fields map[string]interface{}) (goErr errorcode.Error)
+	CheckUserExistByUserName(username string) (exist bool, goErr errorcode.Error)
 	GetUserByUserName(username string) (user model.User, goErr errorcode.Error)
 }
 

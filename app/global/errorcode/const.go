@@ -25,7 +25,7 @@ const (
 	UsernameRegexRuleError ResponseErrType = "Username Regex Rule Error"
 	PasswordRegexRuleError ResponseErrType = "Password Regex Rule Error"
 
-	GetUserError               ResponseErrType = "Get User Error"
+	CheckUserExistError        ResponseErrType = "Check User Exist Error"
 	UserCreateError            ResponseErrType = "User Create Error"
 	UserPasswordIncorrectError ResponseErrType = "User Password Incorrect Error"
 	GenerateTokenError         ResponseErrType = "Generate Token Error"
@@ -36,6 +36,9 @@ const (
 	VisitAbmediaNewsError      ResponseErrType = "Visit Abmedia News Error"
 	GetArticleByTypeNamesError ResponseErrType = "Get Article by Type Names Error"
 	InsertArticleByMapsError   ResponseErrType = "Insert Article by Maps Error"
+	GetUserError               ResponseErrType = "Get User Error"
+	UserAlreadyExist           ResponseErrType = "User Already Exist"
+	HashPasswordError          ResponseErrType = "Hash Password Error"
 
 	/* Database error*/
 	DBConnectError     ResponseErrType = "DB Connect Error"
