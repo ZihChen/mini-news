@@ -17,10 +17,13 @@ const (
 	AlreadyExists    ResponseErrType = "Already Exists"
 
 	/* Request validate error */
-	JsonBindError     ResponseErrType = "JSON Bind Error"
-	StructToMapError  ResponseErrType = "Struct To Map Error"
-	InvalidParamError ResponseErrType = "Invalid Param Error"
-	JsonMarshalError  ResponseErrType = "Json Marshal Error"
+	JsonBindError          ResponseErrType = "JSON Bind Error"
+	StructToMapError       ResponseErrType = "Struct To Map Error"
+	InvalidParamError      ResponseErrType = "Invalid Param Error"
+	JsonMarshalError       ResponseErrType = "Json Marshal Error"
+	RegexMatchError        ResponseErrType = "Regex Match Error"
+	UsernameRegexRuleError ResponseErrType = "Username Regex Rule Error"
+	PasswordRegexRuleError ResponseErrType = "Password Regex Rule Error"
 
 	GetUserError               ResponseErrType = "Get User Error"
 	UserCreateError            ResponseErrType = "User Create Error"

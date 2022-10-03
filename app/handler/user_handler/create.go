@@ -2,6 +2,7 @@ package user_handler
 
 import (
 	"github.com/gin-gonic/gin"
+	"mini-news/app/global/consts"
 	"mini-news/app/global/errorcode"
 	"mini-news/app/global/helper"
 	"mini-news/app/global/response"
@@ -53,6 +54,32 @@ func (h *Handler) RegisterUser(c *gin.Context) {
 
 	if err := validator.ValidateParams(option); err != nil {
 		goErr := helper.ErrorHandle(errorcode.ErrorHandler, errorcode.InvalidParamError, err.Error())
+		response.WrapContext(c).Error(http.StatusOK, goErr)
+		return
+	}
+
+	ok, err := validator.ValidateRegex(option.Username, consts.UsernameRegexRule)
+	if err != nil {
+		goErr := helper.ErrorHandle(errorcode.ErrorHandler, errorcode.RegexMatchError, err.Error())
+		response.WrapContext(c).Error(http.StatusOK, goErr)
+		return
+	}
+
+	if !ok {
+		goErr := helper.ErrorHandle(errorcode.ErrorHandler, errorcode.UsernameRegexRuleError, "")
+		response.WrapContext(c).Error(http.StatusOK, goErr)
+		return
+	}
+
+	ok, err = validator.ValidateRegex(option.Password, consts.PasswordRegexRule)
+	if err != nil {
+		goErr := helper.ErrorHandle(errorcode.ErrorHandler, errorcode.RegexMatchError, err.Error())
+		response.WrapContext(c).Error(http.StatusOK, goErr)
+		return
+	}
+
+	if !ok {
+		goErr := helper.ErrorHandle(errorcode.ErrorHandler, errorcode.PasswordRegexRuleError, "")
 		response.WrapContext(c).Error(http.StatusOK, goErr)
 		return
 	}
