@@ -12,7 +12,7 @@ func (b *business) UserLogin(option request.UserLogin) (token string, goErr erro
 		return
 	}
 
-	if user.Password != option.Password {
+	if ok := helper.CheckPasswordHash(user.Password, option.Password); !ok {
 		goErr = helper.ErrorHandle(errorcode.ErrorBusiness, errorcode.UserPasswordIncorrectError, "")
 		return
 	}
