@@ -3,6 +3,8 @@ package settings
 import (
 	"embed"
 	"gopkg.in/yaml.v2"
+	"log"
+	"mini-news/app/global/errorcode"
 	"mini-news/app/global/structs"
 )
 
@@ -17,11 +19,11 @@ func Load(f embed.FS) (err error) {
 	for k := range envPathList {
 		configFile, err := f.ReadFile(envPathList[k])
 		if err != nil {
-			panic(err.Error())
+			log.Fatalf(errorcode.ReadFileError, err.Error())
 		}
 
 		if err = yaml.Unmarshal(configFile, &Config); err != nil {
-			panic(err.Error())
+			log.Fatalf(errorcode.YamlUnmarshalError, err.Error())
 		}
 	}
 

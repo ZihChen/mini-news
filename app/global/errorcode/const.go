@@ -51,6 +51,8 @@ const (
 	PingDBError           string = "Ping DB Error: %v"
 	RedisConnectError     string = "Redis Connect Error: %v"
 	PingRedisError        string = "Ping Redis Error: %v"
+	ReadFileError         string = "Read File Error: %v"
+	YamlUnmarshalError    string = "Yaml Unmarshal Error: %v"
 
 	UserTableMigrateError          string = "User Table Migrate Error: %v"
 	CryptoArticleTableMigrateError string = "CryptoArticle Table Migrate Error: %v"
