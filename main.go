@@ -3,6 +3,7 @@ package main
 import (
 	"embed"
 	"mini-news/app/global/settings"
+	"mini-news/internal/cache"
 	"mini-news/internal/database"
 	"mini-news/internal/entry"
 
@@ -20,6 +21,10 @@ func init() {
 	db.Ping()
 	// Table migrate
 	db.CheckTableIsExist()
+
+	// Redis connect
+	redis := cache.NewRedisConnect()
+	redis.Ping()
 }
 
 // @title MiniNews

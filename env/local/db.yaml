@@ -3,3 +3,8 @@ db_config:
   username: root
   password: root
   database: mininews
+
+redis_config:
+  host: mini-news-redis
+  port: 6379
+  password: rd3Redis

@@ -14,6 +14,7 @@ require (
 	github.com/goccy/go-json v0.9.11 // indirect
 	github.com/gocolly/colly v1.2.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
+	github.com/gomodule/redigo v1.8.9 // indirect
 	github.com/google/uuid v1.3.0
 	github.com/json-iterator/go v1.1.12
 	github.com/kennygrant/sanitize v1.2.4 // indirect

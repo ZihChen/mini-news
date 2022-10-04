@@ -32,6 +32,18 @@ services:
     command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci --init-connect='SET NAMES UTF8;' --innodb-flush-log-at-trx-commit=0
     networks:
       - web_service
+  redis:
+    image: redis:5.0.8
+    container_name: ${PROJECT_NAME}-redis
+    sysctls:
+      net.core.somaxconn: 1024
+    restart: always
+    volumes:
+      - ./Redis/${PROJECT_NAME}:/data
+      - ./redis-conf/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+    networks:
+      - web_service
 
 networks:
   web_service:

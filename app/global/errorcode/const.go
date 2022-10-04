@@ -49,6 +49,8 @@ const (
 	CheckDBConnectError   string = "Check DB Connect Error: %v"
 	CheckConnectPoolError string = "Check ConnectPool Error: %v"
 	PingDBError           string = "Ping DB Error: %v"
+	RedisConnectError     string = "Redis Connect Error: %v"
+	PingRedisError        string = "Ping Redis Error: %v"
 
 	UserTableMigrateError          string = "User Table Migrate Error: %v"
 	CryptoArticleTableMigrateError string = "CryptoArticle Table Migrate Error: %v"
