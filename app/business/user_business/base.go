@@ -5,6 +5,7 @@ import (
 	"mini-news/app/global/structs/request"
 	"mini-news/app/repository/user_repo"
 	"mini-news/app/service/jwtservice"
+	"mini-news/internal/cache"
 	"sync"
 )
 
@@ -16,6 +17,7 @@ type Interface interface {
 type business struct {
 	userRepo   user_repo.Interface
 	jwtService jwtservice.Interface
+	cache      cache.Interface
 }
 
 var singleton *business
@@ -26,6 +28,7 @@ func NewBusiness() Interface {
 		singleton = &business{
 			userRepo:   user_repo.NewRepo(),
 			jwtService: jwtservice.NewService(),
+			cache:      cache.NewRedisConnect(),
 		}
 	})
 	return singleton

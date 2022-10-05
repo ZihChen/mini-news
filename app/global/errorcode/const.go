@@ -6,6 +6,7 @@ const (
 	ErrorBusiness   ErrComponent = "business"
 	ErrorRepository ErrComponent = "repository"
 	ErrorDatabase   ErrComponent = "database"
+	ErrorRedis      ErrComponent = "redis"
 	ErrorMiddleware ErrComponent = "middleware"
 )
 
@@ -43,6 +44,12 @@ const (
 	/* Database error*/
 	DBConnectError     ResponseErrType = "DB Connect Error"
 	DBConnectPoolError ResponseErrType = "DB ConnectPool Error"
+
+	/* Redis error*/
+	RedisHashSetError      ResponseErrType = "Redis Hash Set Error"
+	RedisSetError          ResponseErrType = "Redis Set Error"
+	CheckHashKeyExistError ResponseErrType = "Check Hash Key Exist Error"
+	RedisSetExpireError    ResponseErrType = "Redis Set Expire Error"
 )
 
 const (

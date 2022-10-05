@@ -5,6 +5,7 @@ import (
 	"github.com/gomodule/redigo/redis"
 	"log"
 	"mini-news/app/global/errorcode"
+	"mini-news/app/global/helper"
 	"mini-news/app/global/settings"
 	"sync"
 	"time"
@@ -12,6 +13,9 @@ import (
 
 type Interface interface {
 	Ping()
+	CheckHashKeyExist(hashKey string) (exist bool, goErr errorcode.Error)
+	Set(key string, value interface{}, expire int) (goErr errorcode.Error)
+	HashSet(hashKey string, key, value interface{}, expire int) (goErr errorcode.Error)
 }
 
 type Redis struct{}
@@ -28,7 +32,7 @@ func NewRedisConnect() Interface {
 	return singleton
 }
 
-func (r *Redis) RedisPoolConnect() *redis.Pool {
+func (r *Redis) redisPoolConnect() *redis.Pool {
 	if redisPool != nil {
 		return redisPool
 	}
@@ -75,12 +79,73 @@ func (r *Redis) RedisPoolConnect() *redis.Pool {
 }
 
 func (r *Redis) Ping() {
-	connPool := r.RedisPoolConnect()
+	connPool := r.redisPoolConnect()
 	conn := connPool.Get()
+
+	defer func() {
+		conn.Close()
+	}()
 
 	_, err := conn.Do("PING")
 	if err != nil {
 		conn.Close()
 		log.Fatalf(errorcode.PingRedisError, err.Error())
 	}
+}
+
+func (r *Redis) CheckHashKeyExist(hashKey string) (exist bool, goErr errorcode.Error) {
+	RedisPool := r.redisPoolConnect()
+	conn := RedisPool.Get()
+
+	defer func() {
+		conn.Close()
+	}()
+
+	result, _ := conn.Do("EXISTS", hashKey)
+	exist, err := redis.Bool(result, nil)
+	if err != nil {
+		helper.ErrorHandle(errorcode.ErrorRedis, errorcode.CheckHashKeyExistError, err.Error())
+	}
+
+	return
+}
+
+func (r *Redis) Set(key string, value interface{}, expire int) (goErr errorcode.Error) {
+	RedisPool := r.redisPoolConnect()
+	conn := RedisPool.Get()
+
+	defer func() {
+		conn.Close()
+	}()
+
+	if _, err := conn.Do("SET", key, value, "EX", expire); err != nil {
+		goErr = helper.ErrorHandle(errorcode.ErrorRedis, errorcode.RedisSetError, err.Error())
+		return
+	}
+
+	return
+}
+
+func (r *Redis) HashSet(hashKey string, key, value interface{}, expire int) (goErr errorcode.Error) {
+	RedisPool := r.redisPoolConnect()
+	conn := RedisPool.Get()
+
+	defer func() {
+		conn.Close()
+	}()
+
+	exist, _ := r.CheckHashKeyExist(hashKey)
+
+	if _, err := conn.Do("HSET", hashKey, key, value); err != nil {
+		goErr = helper.ErrorHandle(errorcode.ErrorRedis, errorcode.RedisHashSetError, err.Error())
+		return
+	}
+
+	if exist == false {
+		if _, err := conn.Do("EXPIRE", hashKey, expire); err != nil {
+			goErr = helper.ErrorHandle(errorcode.ErrorRedis, errorcode.RedisSetExpireError, err.Error())
+		}
+	}
+
+	return
 }
