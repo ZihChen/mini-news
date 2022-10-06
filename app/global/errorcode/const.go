@@ -8,6 +8,7 @@ const (
 	ErrorDatabase   ErrComponent = "database"
 	ErrorRedis      ErrComponent = "redis"
 	ErrorMiddleware ErrComponent = "middleware"
+	ErrorCronJob    ErrComponent = "cronjob"
 )
 
 /* API Response error*/
@@ -40,6 +41,7 @@ const (
 	GetUserError               ResponseErrType = "Get User Error"
 	UserAlreadyExist           ResponseErrType = "User Already Exist"
 	HashPasswordError          ResponseErrType = "Hash Password Error"
+	FunctionNameNotFound       ResponseErrType = "Function Name Not Found"
 
 	/* Database error*/
 	DBConnectError     ResponseErrType = "DB Connect Error"
