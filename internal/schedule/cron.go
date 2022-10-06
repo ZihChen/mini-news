@@ -3,6 +3,8 @@ package schedule
 import (
 	"fmt"
 	"github.com/robfig/cron/v3"
+	"mini-news/internal/bootstrap"
+	"os"
 )
 
 func Run() {
@@ -22,5 +24,19 @@ func Run() {
 	}
 
 	c.Start()
-	fmt.Printf("[⛑] CronJob start to run!")
+	fmt.Printf("⛑ 啟動排程 ⛑")
+	<-bootstrap.GracefulDown()
+
+	select {
+	case <-bootstrap.WaitOnceSignal():
+		fmt.Println("🚦  收到關閉訊號，強制結束 🚦")
+
+		// 等待背景結束
+		for _, job := range jobs {
+			fmt.Println(job)
+			job.Wait()
+		}
+		os.Exit(2)
+
+	}
 }
