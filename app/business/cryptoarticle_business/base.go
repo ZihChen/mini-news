@@ -8,7 +8,10 @@ import (
 )
 
 type Interface interface {
+	// SyncAbmediaArticles 同步鏈新聞資料
 	SyncAbmediaArticles() (goErr errorcode.Error)
+	// SyncBlockTempoArticles 同步動區新聞資料
+	SyncBlockTempoArticles() (goErr errorcode.Error)
 }
 
 type business struct {

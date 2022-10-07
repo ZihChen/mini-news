@@ -3,7 +3,6 @@ package schedule
 import (
 	"fmt"
 	"github.com/robfig/cron/v3"
-	"mini-news/app/business/cryptoarticle_business"
 	"mini-news/app/global/errorcode"
 	"mini-news/app/global/helper"
 	"sync"
@@ -47,15 +46,15 @@ func (j *Job) Run() {
 func (j *Job) LoadSchedule() (jobs []*Job) {
 
 	return []*Job{
-		{
-			Name: "爬取鏈新聞",
-			Spec: "@every 10m",
-			FuncName: func() (goErr errorcode.Error) {
-				b := cryptoarticle_business.NewBusiness()
-				b.SyncAbmediaArticles()
-				return
-			},
-		},
+		//{
+		//	Name: "爬取鏈新聞",
+		//	Spec: "@every 10m",
+		//	FuncName: func() (goErr errorcode.Error) {
+		//		b := cryptoarticle_business.NewBusiness()
+		//		b.SyncAbmediaArticles()
+		//		return
+		//	},
+		//},
 	}
 }
 

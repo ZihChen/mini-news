@@ -58,6 +58,56 @@ func (b *business) SyncAbmediaArticles() (goErr errorcode.Error) {
 	return
 }
 
+func (b *business) SyncBlockTempoArticles() (goErr errorcode.Error) {
+	insertFields := []map[string]interface{}{}
+
+	btArticles, goErr := b.cryptoNewsService.GetBlockTempoArticles()
+	if goErr != nil {
+		return
+	}
+
+	names := filterNames(btArticles)
+
+	btData, goErr := b.cryptoArticleRepo.GetArticleByTypeNames(cryptonews_service.BLOCKTEMPO, names)
+	if goErr != nil {
+		return
+	}
+
+	if len(btData) == 0 {
+		for k := range btArticles {
+			myMap, err := helper.StructToMap(btArticles[k])
+			if err != nil {
+				goErr = helper.ErrorHandle(errorcode.ErrorBusiness, errorcode.StructToMapError, err.Error())
+				return
+			}
+			insertFields = append(insertFields, myMap)
+		}
+	} else {
+		for k := range btArticles {
+			for i := range btData {
+				if btArticles[k].Name == btData[i].Name {
+					continue
+				}
+
+				myMap, err := helper.StructToMap(btArticles[k])
+				if err != nil {
+					goErr = helper.ErrorHandle(errorcode.ErrorBusiness, errorcode.StructToMapError, err.Error())
+					return
+				}
+
+				insertFields = append(insertFields, myMap)
+			}
+		}
+	}
+
+	goErr = b.cryptoArticleRepo.InsertArticleByMaps(insertFields)
+	if goErr != nil {
+		return
+	}
+
+	return
+}
+
 func filterNames(articles []cryptonews_service.CryptoArticle) (names []string) {
 	for k := range articles {
 		names = append(names, articles[k].Name)
