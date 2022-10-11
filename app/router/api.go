@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"mini-news/app/business/cryptoarticle_business"
+	"mini-news/app/handler/tag_handler"
 	"mini-news/app/handler/user_handler"
 	"mini-news/app/middleware/jwt"
 	"mini-news/app/middleware/logwriter"
@@ -13,6 +13,7 @@ import (
 func LoadingRouter(r *gin.Engine) {
 
 	userHandler := user_handler.NewsHandler()
+	tagHandler := tag_handler.NewHandler()
 
 	api := r.Group("/api", logwriter.RequestLog)
 	{
@@ -25,10 +26,10 @@ func LoadingRouter(r *gin.Engine) {
 
 		api.Use(jwt.VerifyToken)
 		{
-			api.GET("/test", func(c *gin.Context) {
-				b := cryptoarticle_business.NewBusiness()
-				b.SyncBlockCastArticles()
-			})
+			tag := api.Group("/tag")
+			{
+				tag.POST("/create", tagHandler.CreateTag)
+			}
 		}
 	}
 }

@@ -10,3 +10,8 @@ type UserLogin struct {
 	Username string `json:"username" validate:"required"`
 	Password string `json:"password" validate:"required"`
 }
+
+type CreateTagOption struct {
+	Name   string `json:"name" validate:"required,min=1,max=30"`
+	UserID int    `json:"user_id"`
+}
