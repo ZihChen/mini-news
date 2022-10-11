@@ -12,6 +12,8 @@ type Interface interface {
 	SyncAbmediaArticles() (goErr errorcode.Error)
 	// SyncBlockTempoArticles 同步動區新聞資料
 	SyncBlockTempoArticles() (goErr errorcode.Error)
+	// SyncBlockCastArticles 同步區塊客新聞資料
+	SyncBlockCastArticles() (goErr errorcode.Error)
 }
 
 type business struct {

@@ -27,7 +27,7 @@ func LoadingRouter(r *gin.Engine) {
 		{
 			api.GET("/test", func(c *gin.Context) {
 				b := cryptoarticle_business.NewBusiness()
-				b.SyncBlockTempoArticles()
+				b.SyncBlockCastArticles()
 			})
 		}
 	}
