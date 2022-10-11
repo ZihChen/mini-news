@@ -20,5 +20,7 @@ func (r *repo) CreateTagByMap(fields map[string]interface{}) (goErr errorcode.Er
 		return
 	}
 
+	tx.Commit()
+
 	return
 }
