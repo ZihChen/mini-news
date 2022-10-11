@@ -96,6 +96,16 @@ func (d *dbCon) CheckTableIsExist() {
 	if err != nil {
 		log.Fatalf(errorcode.CryptoArticleTableMigrateError, err.Error())
 	}
+
+	err = db.AutoMigrate(&model.Tag{})
+	if err != nil {
+		log.Fatalf(errorcode.TagTableMigrateError, err.Error())
+	}
+
+	err = db.AutoMigrate(&model.ArticleTag{})
+	if err != nil {
+		log.Fatalf(errorcode.ArticleTagTableMigrateError, err.Error())
+	}
 }
 
 func composeConfString() string {

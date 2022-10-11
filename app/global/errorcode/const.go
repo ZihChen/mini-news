@@ -65,4 +65,6 @@ const (
 
 	UserTableMigrateError          string = "User Table Migrate Error: %v"
 	CryptoArticleTableMigrateError string = "CryptoArticle Table Migrate Error: %v"
+	TagTableMigrateError           string = "Tag Table Migrate Error: %v"
+	ArticleTagTableMigrateError    string = "ArticleTag Table Migrate Error: %v"
 )
