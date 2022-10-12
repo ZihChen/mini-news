@@ -15,3 +15,9 @@ type CreateTagOption struct {
 	Name   string `json:"name" validate:"required,min=1,max=30"`
 	UserID int    `json:"user_id"`
 }
+
+type CreateArticleTagOption struct {
+	ArticleID int   `json:"article_id" validate:"required"`
+	TagIDs    []int `json:"tag_ids" validate:"required"`
+	UserID    int   `json:"user_id"`
+}

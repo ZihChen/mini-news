@@ -1,4 +1,4 @@
-package tag_repo
+package article_tag_repo
 
 import (
 	"mini-news/app/global/errorcode"
@@ -7,8 +7,7 @@ import (
 )
 
 type Interface interface {
-	CreateTagByMap(fields map[string]interface{}) (goErr errorcode.Error)
-	GetTagsCountByTagIDsAndUserID(tagIDs []int, userID int) (count int64, goErr errorcode.Error)
+	CreateArticleTagByMap(insertFields []map[string]interface{}) (goErr errorcode.Error)
 }
 
 type repo struct {

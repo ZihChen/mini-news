@@ -27,7 +27,10 @@ const (
 	UsernameRegexRuleError ResponseErrType = "Username Regex Rule Error"
 	PasswordRegexRuleError ResponseErrType = "Password Regex Rule Error"
 
+	ArticleTagCreateError      ResponseErrType = "Article Tag Create Error"
+	TagsCountNotMatchError     ResponseErrType = "Tags Count Not Match Error"
 	TagCreateError             ResponseErrType = "Tag Create Error"
+	GetTagsCountError          ResponseErrType = "Get Tags Count Error"
 	CheckUserExistError        ResponseErrType = "Check User Exist Error"
 	UserCreateError            ResponseErrType = "User Create Error"
 	UserPasswordIncorrectError ResponseErrType = "User Password Incorrect Error"
